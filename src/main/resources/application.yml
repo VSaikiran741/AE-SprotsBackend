@@ -1,9 +1,18 @@
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-d60adbsr85hc73esusqg-a.virginia-postgres.render.com/ae_sports
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://dpg-d60adbsr85hc73esusqg-a.virginia-postgres.render.com:5432/ae_sports
     username: ae_sports_user
     password: K3eQKSS8BImPnzSRWak1PKEVsYaFaFNy
+    driver-class-name: org.postgresql.Driver
+
+    hikari:
+      pool-name: HikariPool-1
+      minimum-idle: 2
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      initialization-fail-timeout: 0
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -17,4 +26,3 @@ spring:
 
 server:
   port: 8080
-
