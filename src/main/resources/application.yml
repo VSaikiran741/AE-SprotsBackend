@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/AE
+    url: jdbc:postgresql://dpg-d60adbsr85hc73esusqg-a.virginia-postgres.render.com/ae_sports
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: ravs
+    username: ae_sports_user
+    password: K3eQKSS8BImPnzSRWak1PKEVsYaFaFNy
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
