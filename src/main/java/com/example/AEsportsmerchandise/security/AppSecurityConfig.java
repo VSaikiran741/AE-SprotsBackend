@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
+
 public class AppSecurityConfig {
 
     private final JwtFilter jwtFilter;
@@ -31,27 +32,22 @@ public class AppSecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
 
-                        // 🔓 Swagger & OpenAPI
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        // 🔓 Auth & public APIs
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
 
-                        // 🔒 User APIs
                         .requestMatchers("/cart/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/orders/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/payments/**").hasAuthority("ROLE_USER")
 
-                        // 🔒 Admin APIs
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
 
-                        // 🔐 Everything else
                         .anyRequest().authenticated()
                 );
 
@@ -59,5 +55,11 @@ public class AppSecurityConfig {
         return http.build();
     }
 
+    // ✅ THIS WAS MISSING
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
+
 
