@@ -30,27 +30,34 @@ public class AppSecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+
+                        // 🔓 Swagger & OpenAPI
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
+                        // 🔓 Auth & public APIs
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
 
+                        // 🔒 User APIs
                         .requestMatchers("/cart/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/orders/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/payments/**").hasAuthority("ROLE_USER")
 
+                        // 🔒 Admin APIs
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
 
+                        // 🔐 Everything else
                         .anyRequest().authenticated()
                 );
-
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }
 
