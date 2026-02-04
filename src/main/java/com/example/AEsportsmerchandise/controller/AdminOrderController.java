@@ -2,6 +2,7 @@ package com.example.AEsportsmerchandise.controller;
 
 import com.example.AEsportsmerchandise.service.OrderService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
         name = "Admin - Orders",
         description = "Admin order management APIs"
 )
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/admin/orders")
 @RequiredArgsConstructor

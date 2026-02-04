@@ -6,11 +6,14 @@ import com.example.AEsportsmerchandise.entity.ProductVariantEntity;
 import com.example.AEsportsmerchandise.repository.ProductRepository;
 import com.example.AEsportsmerchandise.repository.ProductVariantRepository;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@SecurityRequirement(name = "bearerAuth")
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/products")

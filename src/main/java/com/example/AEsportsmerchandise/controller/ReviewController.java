@@ -4,6 +4,7 @@ import com.example.AEsportsmerchandise.dto.ReviewRequest;
 import com.example.AEsportsmerchandise.dto.ReviewResponse;
 import com.example.AEsportsmerchandise.service.ReviewService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +20,8 @@ import java.util.List;
         name = "Reviews",
         description = "Product reviews APIs"
 )
+//@SecurityRequirement(name = "bearerAuth")
+
 @RestController
 @RequestMapping("/reviews")
 @RequiredArgsConstructor
@@ -46,6 +49,8 @@ public class ReviewController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PostMapping
     @PreAuthorize("hasRole('USER')")
+    @SecurityRequirement(name = "bearerAuth")
+
     public void addReview(
             @RequestBody ReviewRequest request
     ) {
@@ -60,6 +65,8 @@ public class ReviewController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @DeleteMapping("/admin/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+
     public void deleteReview(
             @PathVariable Long id
     ) {

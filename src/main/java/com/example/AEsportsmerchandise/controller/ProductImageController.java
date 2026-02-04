@@ -6,11 +6,13 @@ import com.example.AEsportsmerchandise.entity.ProductImageEntity;
 import com.example.AEsportsmerchandise.repository.ProductImageRepository;
 import com.example.AEsportsmerchandise.repository.ProductRepository;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@SecurityRequirement(name = "bearerAuth")
 
 @RestController
 @RequiredArgsConstructor

@@ -6,6 +6,7 @@ import com.example.AEsportsmerchandise.dto.PaymentStatusResponse;
 import com.example.AEsportsmerchandise.dto.PaymentVerifyRequest;
 import com.example.AEsportsmerchandise.service.PaymentService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
         name = "Payments",
         description = "Payment initiation and verification APIs"
 )
+@SecurityRequirement(name = "bearerAuth")
+
 @RestController
 @RequestMapping("/payments")
 @RequiredArgsConstructor

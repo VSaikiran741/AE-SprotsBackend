@@ -4,6 +4,7 @@ import com.example.AEsportsmerchandise.dto.ProductRequest;
 import com.example.AEsportsmerchandise.dto.ProductResponse;
 import com.example.AEsportsmerchandise.service.ProductService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +20,7 @@ import java.util.List;
         name = "Admin - Products",
         description = "Admin product management APIs"
 )
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/admin/products")
 @RequiredArgsConstructor

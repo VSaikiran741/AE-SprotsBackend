@@ -5,6 +5,7 @@ import com.example.AEsportsmerchandise.dto.OrderItemResponse;
 import com.example.AEsportsmerchandise.dto.OrderSummaryResponse;
 import com.example.AEsportsmerchandise.service.OrderService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,6 +21,7 @@ import java.util.List;
         name = "Orders",
         description = "Order placement and tracking APIs (USER role required)"
 )
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor

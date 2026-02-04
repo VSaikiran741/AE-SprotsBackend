@@ -5,6 +5,7 @@ import com.example.AEsportsmerchandise.dto.CartResponse;
 import com.example.AEsportsmerchandise.dto.CartUpdateRequest;
 import com.example.AEsportsmerchandise.service.CartService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
         name = "Cart",
         description = "User cart management APIs (USER role required)"
 )
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/cart")
 @RequiredArgsConstructor
