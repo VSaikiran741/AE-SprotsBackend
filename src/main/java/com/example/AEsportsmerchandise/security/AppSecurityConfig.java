@@ -46,6 +46,7 @@ public class AppSecurityConfig {
                         // 🔓 Public APIs
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
 
                         // 🔒 USER APIs
