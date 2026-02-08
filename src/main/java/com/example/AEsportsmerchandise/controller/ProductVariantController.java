@@ -38,6 +38,12 @@ public class ProductVariantController {
         variant.setPrice(request.getPrice());
         variant.setStock(request.getStock());
         variant.setReservedStock(0);
+
+        // ✅ Pricing comes from Product always
+        variant.setBasePrice(product.getBasePrice());
+        variant.setDiscountPrice(product.getDiscountPrice());
+        variant.setDiscountPercent(product.getDiscountPercent());
+
         variant.setActive(true);
 
         variant = variantRepository.save(variant);
@@ -51,7 +57,7 @@ public class ProductVariantController {
         dto.setStock(variant.getStock());
         dto.setActive(variant.getActive());
 
-        // ✅ add pricing fields
+        // ✅ return pricing
         dto.setBasePrice(product.getBasePrice());
         dto.setDiscountPrice(product.getDiscountPrice());
         dto.setDiscountPercent(product.getDiscountPercent());

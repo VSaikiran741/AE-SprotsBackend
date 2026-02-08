@@ -39,6 +39,22 @@ public class ProductService {
         product.setReturnWindowDays(request.getReturnWindowDays());
         product.setActive(true);
 
+        // ✅ Calculate Discount Percent BEFORE saving
+        if (request.getBasePrice() != null && request.getDiscountPrice() != null) {
+
+            BigDecimal base = request.getBasePrice();
+            BigDecimal discount = request.getDiscountPrice();
+
+            if (base.compareTo(BigDecimal.ZERO) > 0) {
+
+                BigDecimal percent = base.subtract(discount)
+                        .multiply(BigDecimal.valueOf(100))
+                        .divide(base, 0, java.math.RoundingMode.HALF_UP); // 0 = no decimals
+
+                product.setDiscountPercent(percent.intValue()); // ✅ Integer
+            }
+        }
+
         // 2. Save product (ID generated here)
         product = productRepository.save(product);
 
@@ -50,15 +66,19 @@ public class ProductService {
                 ProductVariantRequest v = request.getVariants().get(i);
 
                 ProductVariantEntity variant = new ProductVariantEntity();
-                variant.setProduct(product); // FK
+                variant.setProduct(product);
                 variant.setSize(v.getSize());
                 variant.setColor(v.getColor());
                 variant.setPrice(v.getPrice());
-//                variant.setStock(v.getReservedStock());
                 variant.setStock(v.getStock());
                 variant.setReservedStock(0);
-                variant.setActive(true);
 
+                // ✅ pricing copied from product
+                variant.setBasePrice(product.getBasePrice());
+                variant.setDiscountPrice(product.getDiscountPrice());
+                variant.setDiscountPercent(product.getDiscountPercent());
+
+                variant.setActive(true);
 
                 variantRepository.save(variant);
             }
@@ -72,7 +92,7 @@ public class ProductService {
                 ProductImageRequest img = request.getImages().get(i);
 
                 ProductImageEntity image = new ProductImageEntity();
-                image.setProduct(product); // FK
+                image.setProduct(product);
                 image.setImageUrl(img.getImageUrl());
                 image.setPublicId(img.getPublicId());
 
@@ -95,7 +115,6 @@ public class ProductService {
         // 5. Return response DTO
         return toProductResponse(product);
     }
-
     // ================= GET ALL PRODUCTS =================
     public List<ProductResponse> getAll() {
 
@@ -104,13 +123,15 @@ public class ProductService {
         List<ProductEntity> products = productRepository.findAll();
 
         for (int i = 0; i < products.size(); i++) {
+
             ProductEntity product = products.get(i);
+
+            // Convert entity → response DTO
             responses.add(toProductResponse(product));
         }
 
         return responses;
     }
-
     // ================= GET PRODUCT BY ID =================
     public ProductResponse getById(Long id) {
 
@@ -128,6 +149,7 @@ public class ProductService {
 
         return toProductResponse(product);
     }
+
 
     // ================= ENTITY → RESPONSE DTO =================
     public ProductResponse toProductResponse(ProductEntity product) {
@@ -258,6 +280,14 @@ public class ProductService {
         product.setDiscountPrice(request.getDiscountPrice());
         product.setReturnable(request.getReturnable());
         product.setReturnWindowDays(request.getReturnWindowDays());
+        List<ProductVariantEntity> variants = variantRepository.findByProduct_Id(product.getId());
+
+        for (ProductVariantEntity v : variants) {
+            v.setBasePrice(product.getBasePrice());
+            v.setDiscountPrice(product.getDiscountPrice());
+            v.setDiscountPercent(product.getDiscountPercent());
+            variantRepository.save(v);
+        }
 
         productRepository.save(product);
 

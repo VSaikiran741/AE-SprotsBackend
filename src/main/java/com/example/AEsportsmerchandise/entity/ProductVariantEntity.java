@@ -40,6 +40,9 @@ public class ProductVariantEntity {
 
     @Column(nullable = false)
     private Integer stock;
+    private BigDecimal basePrice;
+    private BigDecimal discountPrice;
+    private Integer discountPercent;
 
     // 🔥 CRITICAL FOR PHASE 5
     @Column(name = "reserved_stock", nullable = false)
