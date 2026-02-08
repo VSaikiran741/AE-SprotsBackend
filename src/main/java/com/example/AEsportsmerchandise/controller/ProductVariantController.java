@@ -9,12 +9,9 @@ import com.example.AEsportsmerchandise.repository.ProductVariantRepository;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/products")
@@ -38,12 +35,6 @@ public class ProductVariantController {
         variant.setPrice(request.getPrice());
         variant.setStock(request.getStock());
         variant.setReservedStock(0);
-
-        // ✅ Pricing comes from Product always
-        variant.setBasePrice(product.getBasePrice());
-        variant.setDiscountPrice(product.getDiscountPrice());
-        variant.setDiscountPercent(product.getDiscountPercent());
-
         variant.setActive(true);
 
         variant = variantRepository.save(variant);
@@ -57,7 +48,7 @@ public class ProductVariantController {
         dto.setStock(variant.getStock());
         dto.setActive(variant.getActive());
 
-        // ✅ return pricing
+        // ✅ pricing always comes from ProductEntity
         dto.setBasePrice(product.getBasePrice());
         dto.setDiscountPrice(product.getDiscountPrice());
         dto.setDiscountPercent(product.getDiscountPercent());

@@ -10,9 +10,9 @@ public class ProductVariantRequest {
     private String color;
     private BigDecimal price;
     private Integer stock;
-//    private Integer reservedStock;
-    private BigDecimal basePrice;
-    private BigDecimal discountPrice;
-    private Integer discountPercent;
+////    private Integer reservedStock;
+//    private BigDecimal basePrice;
+//    private BigDecimal discountPrice;
+//    private Integer discountPercent;
 //}
 }
