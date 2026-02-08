@@ -54,8 +54,11 @@ public class ProductService {
                 variant.setSize(v.getSize());
                 variant.setColor(v.getColor());
                 variant.setPrice(v.getPrice());
-                variant.setStock(v.getReservedStock());
+//                variant.setStock(v.getReservedStock());
+                variant.setStock(v.getStock());
+                variant.setReservedStock(0);
                 variant.setActive(true);
+
 
                 variantRepository.save(variant);
             }
@@ -221,9 +224,14 @@ public class ProductService {
         dto.setStock(v.getStock());
         dto.setActive(v.getActive());
 
+        // ✅ product pricing inside variant response
+        ProductEntity p = v.getProduct();
+        dto.setBasePrice(p.getBasePrice());
+        dto.setDiscountPrice(p.getDiscountPrice());
+        dto.setDiscountPercent(p.getDiscountPercent());
+
         return dto;
     }
-
     // ================= IMAGE ENTITY → DTO =================
     private ProductImageResponse toImageResponse(ProductImageEntity img) {
 
