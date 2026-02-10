@@ -55,10 +55,10 @@ public class ProductService {
             }
         }
 
-        // Save product first
+        // ✅ Save product first
         product = productRepository.save(product);
 
-        // Save Variants
+        // ================= SAVE VARIANTS =================
         if (request.getVariants() != null) {
 
             for (ProductVariantRequest v : request.getVariants()) {
@@ -74,9 +74,12 @@ public class ProductService {
 
                 variantRepository.save(variant);
             }
+
+            // ✅ VERY IMPORTANT (flush variants before searching them)
+            variantRepository.flush();
         }
 
-        // Save Images
+        // ================= SAVE IMAGES =================
         if (request.getImages() != null) {
 
             for (ProductImageRequest img : request.getImages()) {
@@ -89,6 +92,25 @@ public class ProductService {
                 image.setIsPrimary(img.getIsPrimary() != null ? img.getIsPrimary() : false);
                 image.setSortOrder(img.getSortOrder() != null ? img.getSortOrder() : 0);
 
+                // ✅ Link image to variant using color + size
+                if (img.getColor() != null && img.getSize() != null) {
+
+                    String color = img.getColor().trim();
+                    String size = img.getSize().trim();
+
+                    ProductVariantEntity variant = variantRepository
+                            .findByProduct_IdAndColorIgnoreCaseAndSizeIgnoreCase(product.getId(), color, size);
+
+                    if (variant == null) {
+                        throw new RuntimeException("Variant not found for image: "
+                                + "productId=" + product.getId()
+                                + ", color=" + color
+                                + ", size=" + size);
+                    }
+
+                    image.setVariant(variant);
+                }
+
                 imageRepository.save(image);
             }
         }
@@ -97,7 +119,7 @@ public class ProductService {
     }
 
     // ================= GET ALL PRODUCTS =================
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ProductResponse> getAll() {
 
         List<ProductResponse> responses = new ArrayList<>();
@@ -111,7 +133,7 @@ public class ProductService {
     }
 
     // ================= GET PRODUCT BY ID =================
-    @Transactional(readOnly = true)
+    @Transactional
     public ProductResponse getById(Long id) {
 
         ProductEntity product = productRepository.findById(id)
@@ -131,7 +153,7 @@ public class ProductService {
     }
 
     // ================= GET VARIANTS BY PRODUCT =================
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ProductVariantResponse> getVariants(Long productId) {
 
         List<ProductVariantEntity> variants =
@@ -147,11 +169,11 @@ public class ProductService {
     }
 
     // ================= GET IMAGES BY PRODUCT =================
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ProductImageResponse> getImages(Long productId) {
 
         List<ProductImageEntity> images =
-                imageRepository.findByProduct_Id(productId);
+                imageRepository.findByProductIdWithVariant(productId);
 
         List<ProductImageResponse> responses = new ArrayList<>();
 
@@ -161,7 +183,6 @@ public class ProductService {
 
         return responses;
     }
-
     // ================= ENTITY → PRODUCT RESPONSE DTO =================
     public ProductResponse toProductResponse(ProductEntity product) {
 
@@ -198,7 +219,7 @@ public class ProductService {
 
         // Images
         List<ProductImageEntity> imageEntities =
-                imageRepository.findByProduct_Id(product.getId());
+                imageRepository.findByProductIdWithVariant(product.getId());
 
         List<ProductImageResponse> imageResponses = new ArrayList<>();
         for (ProductImageEntity image : imageEntities) {
@@ -222,7 +243,6 @@ public class ProductService {
         dto.setStock(v.getStock());
         dto.setActive(v.getActive());
 
-        // ✅ Works because transaction session is active
         ProductEntity product = v.getProduct();
         dto.setBasePrice(product.getBasePrice());
         dto.setDiscountPrice(product.getDiscountPrice());
@@ -241,6 +261,9 @@ public class ProductService {
         dto.setPublicId(img.getPublicId());
         dto.setIsPrimary(img.getIsPrimary());
         dto.setSortOrder(img.getSortOrder());
+
+
+        dto.setSku(img.getSku());
 
         return dto;
     }

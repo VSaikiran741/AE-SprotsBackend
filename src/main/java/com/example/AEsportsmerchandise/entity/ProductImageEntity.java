@@ -16,6 +16,9 @@ public class ProductImageEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "variant_id")
+    private ProductVariantEntity variant;
 
     @Column(nullable = false)
     private String imageUrl;
@@ -25,4 +28,8 @@ public class ProductImageEntity {
     private Boolean isPrimary = false;
 
     private Integer sortOrder = 0;
+
+    @Column(name = "sku")
+    private String sku;
+//    private String sku;
 }
