@@ -1,6 +1,7 @@
 package com.example.AEsportsmerchandise.service;
 
 import com.example.AEsportsmerchandise.dto.PaymentInitiateResponse;
+import com.example.AEsportsmerchandise.dto.PaymentResponse;
 import com.example.AEsportsmerchandise.dto.PaymentStatusResponse;
 import com.example.AEsportsmerchandise.dto.PaymentVerifyRequest;
 import com.example.AEsportsmerchandise.entity.*;
@@ -9,6 +10,9 @@ import com.example.AEsportsmerchandise.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,42 @@ public class PaymentService {
 
         return response;
     }
+    // ================= GET ALL PAYMENTS (ADMIN) =================
+    public List<PaymentResponse> getAllPayments() {
+
+        List<PaymentEntity> payments = paymentRepository.findAll();
+
+        List<PaymentResponse> responses = new ArrayList<>();
+
+        for (PaymentEntity payment : payments) {
+            responses.add(toPaymentResponse(payment));
+        }
+
+        return responses;
+    }
+
+    private PaymentResponse toPaymentResponse(PaymentEntity payment) {
+
+        PaymentResponse dto = new PaymentResponse();
+
+        dto.setId(payment.getId());
+        dto.setOrderId(payment.getOrder().getId());
+        dto.setAmount(payment.getAmount());
+
+        dto.setStatus(payment.getStatus().name());
+        dto.setMethod(payment.getMethod().name());
+
+        dto.setGatewayOrderId(payment.getGatewayOrderId());
+        dto.setGatewayPaymentId(payment.getGatewayPaymentId());
+
+        dto.setAttemptCount(payment.getAttemptCount());
+
+        dto.setCreatedAt(payment.getCreatedAt());
+        dto.setUpdatedAt(payment.getUpdatedAt());
+
+        return dto;
+    }
+
     @Transactional
     public PaymentInitiateResponse initiatePayment(Long orderId, String method) {
 

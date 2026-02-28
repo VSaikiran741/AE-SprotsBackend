@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Tag(
@@ -25,6 +26,14 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    @Operation(
+            summary = "Get suggested products",
+            description = "Fetch related products from same category"
+    )
+    @GetMapping("/{id}/suggested")
+    public List<ProductResponse> getSuggestedProducts(@PathVariable Long id) {
+        return productService.getSuggestedProducts(id);
+    }
 
     @Operation(
             summary = "Get all products",
@@ -66,4 +75,18 @@ public class ProductController {
     public List<ProductImageResponse> getImages(@PathVariable Long id) {
         return productService.getImages(id);
     }
+    @Operation(
+            summary = "Search and filter products",
+            description = "Search products by keyword, category, and price"
+    )
+    @ApiResponse(responseCode = "200", description = "Products fetched successfully")
+    @GetMapping("/search")
+    public List<ProductResponse> searchProducts(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Double price
+    ) {
+        return productService.searchProducts(q, category, BigDecimal.valueOf(price));
+    }
+
 }

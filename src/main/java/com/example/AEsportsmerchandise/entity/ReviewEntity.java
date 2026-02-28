@@ -1,5 +1,6 @@
 package com.example.AEsportsmerchandise.entity;
 
+import com.example.AEsportsmerchandise.dto.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,17 +19,18 @@ public class ReviewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private ProductEntity product;
 
     private Integer rating;
     private String comment;
     private Boolean verifiedPurchase = true;
+
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status = ReviewStatus.PENDING; // ⭐
 
     private LocalDateTime createdAt;
 

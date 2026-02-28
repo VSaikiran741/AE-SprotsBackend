@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -72,6 +73,22 @@ public class ReviewService {
 
         productRepository.save(product);
     }
+    public List<ReviewResponse> getReviewsByVerifiedPurchase(boolean verified) {
+
+        return reviewRepository.findByVerifiedPurchase(verified)
+                .stream()
+                .map(review -> new ReviewResponse(
+                        review.getId(),
+                        review.getRating(),
+                        review.getComment(),
+                        review.getUser().getEmail(),
+                        review.getVerifiedPurchase(),
+                        review.getCreatedAt()
+                ))
+                .toList();
+    }
+
+
 
     // ✅ GET REVIEWS BY PRODUCT (public)
     public List<ReviewResponse> getReviewsByProduct(Long productId) {

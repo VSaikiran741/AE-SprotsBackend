@@ -68,6 +68,19 @@ public class CartController {
         cartService.updateQuantity(itemId, request.getQuantity());
         return ResponseEntity.ok().build();
     }
+//    @Operation(summary = "Get cart item count")
+//    @GetMapping("/count")
+//    public int getCartItemCount() {
+//        return cartService.getCartItemCount();
+//    }
+//
+//    @Operation(summary = "Select or unselect a cart item")
+//    @PatchMapping("/select/{itemId}")
+//    public void toggleCartItemSelection(
+//            @PathVariable Long itemId
+//    ) {
+//        cartService.toggleSelection(itemId);
+//    }
 
     @Operation(
             summary = "Remove item from cart",

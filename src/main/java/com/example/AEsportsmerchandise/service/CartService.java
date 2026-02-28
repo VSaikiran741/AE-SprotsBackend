@@ -142,5 +142,32 @@ public class CartService {
 
         cart.getItems().clear();
     }
+//    public int getCartItemCount() {
+//
+//        UserEntity user = getCurrentUser();
+//
+//        return cartItemRepository.countByUser_Id(user.getId());
+//    }
+
+//    // ================= TOGGLE CART ITEM SELECTION =================
+//    @Transactional
+//    public void toggleSelection(Long itemId) {
+//
+//        UserEntity user = getCurrentUser();
+//
+//        CartItemEntity item = cartItemRepository
+//                .findByIdAndUser_Id(itemId, user.getId())
+//                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+//
+//        item.setSelected(!item.getSelected());
+//    }
+//    private UserEntity getCurrentUser() {
+//
+//        Authentication auth =
+//                SecurityContextHolder.getContext().getAuthentication();
+//
+//        return (UserEntity) auth.getPrincipal();
+//    }
+//
 
 }

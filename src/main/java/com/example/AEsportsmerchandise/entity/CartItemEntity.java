@@ -29,4 +29,7 @@ public class CartItemEntity {
 
     @Column(nullable = false)
     private Integer quantity;
+//    @Column(nullable = false)
+//    private Boolean selected = true;
+
 }
