@@ -3,7 +3,7 @@ package com.example.AEsportsmerchandise.repository;
 import com.example.AEsportsmerchandise.dto.ReviewResponse;
 import com.example.AEsportsmerchandise.entity.ProductEntity;
 import com.example.AEsportsmerchandise.entity.ReviewEntity;
-import com.example.AEsportsmerchandise.dto.ReviewStatus;
+//import com.example.AEsportsmerchandise.entity.ReviewStatus;
 import com.example.AEsportsmerchandise.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +25,7 @@ WHERE r.product.id = :productId
 
     List<ReviewEntity> findByProductId(Long productId);
     boolean existsByUserAndProduct(UserEntity user, ProductEntity product);
-    List<ReviewEntity> findByStatus(ReviewStatus status);
+//    List<ReviewEntity> findByStatus(ReviewStatus status);
     List<ReviewEntity> findByVerifiedPurchase(Boolean verifiedPurchase);
 
 

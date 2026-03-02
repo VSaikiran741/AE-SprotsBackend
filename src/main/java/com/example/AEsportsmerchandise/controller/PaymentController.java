@@ -70,7 +70,8 @@ public class PaymentController {
     @ApiResponse(responseCode = "200", description = "Payment status fetched successfully")
     @ApiResponse(responseCode = "404", description = "Payment not found")
     @GetMapping("/{orderId}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER" +
+            "')")
     public PaymentStatusResponse status(@PathVariable Long orderId) {
         return paymentService.getPaymentStatus(orderId);
     }

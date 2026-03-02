@@ -1,6 +1,7 @@
 package com.example.AEsportsmerchandise.entity;
 
-import com.example.AEsportsmerchandise.dto.ReviewStatus;
+import com.example.AEsportsmerchandise.entity.ReviewStatus;
+import com.example.AEsportsmerchandise.entity.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +29,8 @@ public class ReviewEntity {
     private Integer rating;
     private String comment;
     private Boolean verifiedPurchase = true;
-
     @Enumerated(EnumType.STRING)
-    private ReviewStatus status = ReviewStatus.PENDING; // ⭐
+    private ReviewStatus status ;
 
     private LocalDateTime createdAt;
 
