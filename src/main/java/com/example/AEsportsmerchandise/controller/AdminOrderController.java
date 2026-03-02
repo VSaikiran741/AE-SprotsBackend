@@ -1,7 +1,12 @@
 package com.example.AEsportsmerchandise.controller;
 
+import com.example.AEsportsmerchandise.dto.PaymentInitiateResponse;
+import com.example.AEsportsmerchandise.dto.PaymentResponse;
+import com.example.AEsportsmerchandise.dto.ReviewResponse;
 import com.example.AEsportsmerchandise.service.OrderService;
 
+import com.example.AEsportsmerchandise.service.PaymentService;
+import com.example.AEsportsmerchandise.service.ReviewService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(
         name = "Admin - Orders",
@@ -24,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 public class AdminOrderController {
 
     private final OrderService orderService;
+    private final PaymentService paymentService;
+    private final ReviewService reviewService;
 
     @Operation(
             summary = "Cancel order",
@@ -38,4 +47,23 @@ public class AdminOrderController {
     ) {
         orderService.cancelOrder(id);
     }
+
+    @Operation(summary = "Get all payments (Admin)")
+    @GetMapping
+    public List<PaymentResponse> getAllPayments() {
+        return paymentService.getAllPayments();
+    }
+
+    @RequestMapping("/reviews")
+    @Operation(summary = "Get reviews by status (Admin)")
+    @GetMapping
+    public List<ReviewResponse> getReviews(
+            @RequestParam(required = false) Boolean verified
+    ) {
+        if (verified == null) {
+            throw new RuntimeException("verified parameter is required");
+        }
+        return reviewService.getReviewsByVerifiedPurchase(verified);
+    }
 }
+

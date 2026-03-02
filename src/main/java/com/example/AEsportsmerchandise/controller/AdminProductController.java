@@ -78,4 +78,18 @@ public class AdminProductController {
     ) {
         productService.softDelete(id);
     }
+    @Operation(
+            summary = "Update product status",
+            description = "Enable or disable a product (Admin only)"
+    )
+    @ApiResponse(responseCode = "200", description = "Product status updated")
+    @ApiResponse(responseCode = "404", description = "Product not found")
+    @PatchMapping("/{id}/status")
+    public ProductResponse updateStatus(
+            @PathVariable Long id,
+            @RequestParam Boolean active
+    ) {
+        return productService.updateStatus(id, active);
+    }
+
 }

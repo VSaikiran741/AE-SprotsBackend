@@ -54,7 +54,7 @@ public class ProductService {
                 variant.setSize(v.getSize());
                 variant.setColor(v.getColor());
                 variant.setPrice(v.getPrice());
-                variant.setStock(v.getReservedStock());
+                variant.setStock(v.getStock());
                 variant.setActive(true);
 
                 variantRepository.save(variant);
@@ -103,6 +103,19 @@ public class ProductService {
         for (int i = 0; i < products.size(); i++) {
             ProductEntity product = products.get(i);
             responses.add(toProductResponse(product));
+        }
+
+        return responses;
+    }
+    public List<ProductResponse> searchProducts(String q, String category, BigDecimal price) {
+
+        List<ProductEntity> products =
+                productRepository.searchProducts(q, category, price);
+
+        List<ProductResponse> responses = new ArrayList<>();
+
+        for (ProductEntity p : products) {
+            responses.add(toProductResponse(p));
         }
 
         return responses;
@@ -256,7 +269,9 @@ public class ProductService {
         return toProductResponse(product);
     }
 
-    // ================= SOFT DELETE PRODUCT =================
+
+// ================= SOFT DELETE PRODUCT =================
+    @Transactional
     public void softDelete(Long id) {
 
         ProductEntity product = productRepository.findById(id)
@@ -264,5 +279,39 @@ public class ProductService {
 
         product.setActive(false);
         productRepository.save(product);
+    }
+    // ================= SUGGESTED PRODUCTS =================
+    public List<ProductResponse> getSuggestedProducts(Long id) {
+
+        // 1. Get current product
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // 2. Fetch products from same category (excluding current)
+        List<ProductEntity> suggested =
+                productRepository.findSuggestedProducts(
+                        product.getCategory(),
+                        product.getId()
+                );
+
+        // 3. Convert to DTO
+        List<ProductResponse> responses = new ArrayList<>();
+
+        for (ProductEntity p : suggested) {
+            responses.add(toProductResponse(p));
+        }
+
+        return responses;
+    }
+    @Transactional
+    public ProductResponse updateStatus(Long id, Boolean active) {
+
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        product.setActive(active);
+        productRepository.save(product);
+
+        return toProductResponse(product);
     }
 }

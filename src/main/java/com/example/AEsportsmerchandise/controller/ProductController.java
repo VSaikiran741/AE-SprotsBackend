@@ -86,7 +86,9 @@ public class ProductController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Double price
     ) {
-        return productService.searchProducts(q, category, BigDecimal.valueOf(price));
+        BigDecimal priceValue = price != null ? BigDecimal.valueOf(price) : null;
+
+        return productService.searchProducts(q, category, priceValue);
     }
 
 }
