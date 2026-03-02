@@ -13,4 +13,7 @@ public class ProductVariantResponse {
     private BigDecimal price;
     private Integer stock;
     private Boolean active;
+    private BigDecimal basePrice;
+    private BigDecimal discountPrice;
+    private Integer discountPercent;
 }

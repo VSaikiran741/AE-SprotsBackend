@@ -49,6 +49,8 @@
         private BigDecimal discountPrice;
 
         private Integer discountPercent;
+        // ✅ NEW FIELD
+
 
 
         private double rating=0.0;

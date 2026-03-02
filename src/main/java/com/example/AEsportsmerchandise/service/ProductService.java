@@ -107,25 +107,6 @@ public class ProductService {
 
         return responses;
     }
-    public List<ProductResponse> getSuggestedProducts(Long productId) {
-
-        ProductEntity product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        List<ProductEntity> suggestions =
-                productRepository.findSuggestedProducts(
-                        product.getCategory(),
-                        productId
-                );
-
-        List<ProductResponse> responses = new ArrayList<>();
-
-        for (int i = 0; i < suggestions.size() && i < 5; i++) {
-            responses.add(toProductResponse(suggestions.get(i)));
-        }
-
-        return responses;
-    }
 
     // ================= GET PRODUCT BY ID =================
     public ProductResponse getById(Long id) {
@@ -226,27 +207,6 @@ public class ProductService {
 
         return responses;
     }
-    // ================= SEARCH PRODUCTS =================
-    public List<ProductResponse> searchProducts(
-            String q,
-            String category,
-            BigDecimal price
-    ) {
-
-        List<ProductEntity> products = productRepository.searchProducts(
-                q,
-                category,
-                price
-        );
-
-        List<ProductResponse> responses = new ArrayList<>();
-
-        for (ProductEntity product : products) {
-            responses.add(toProductResponse(product));
-        }
-
-        return responses;
-    }
 
 
     // ================= VARIANT ENTITY → DTO =================
@@ -305,15 +265,4 @@ public class ProductService {
         product.setActive(false);
         productRepository.save(product);
     }
-    public ProductResponse updateStatus(Long id, Boolean active) {
-
-        ProductEntity product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        product.setActive(active);
-        productRepository.save(product);
-
-        return toProductResponse(product);
-    }
-
 }

@@ -70,10 +70,7 @@ public class AppSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // ✅ Frontend URLs
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://localhost:5174"
-        ));
+        config.setAllowedOriginPatterns(List.of("*"));
 
         // ✅ HTTP methods frontend can use
         config.setAllowedMethods(List.of(

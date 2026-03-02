@@ -1,6 +1,6 @@
 package com.example.AEsportsmerchandise.security;
 
-
+import com.example.AEsportsmerchandise.entity.UserEntity;
 import com.example.AEsportsmerchandise.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -27,14 +27,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+
         String path = request.getServletPath();
 
         return path.startsWith("/auth/")
+                || path.startsWith("/products/")
+                || path.startsWith("/reviews/")
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
                 || path.equals("/swagger-ui.html");
     }
-
 
     @Override
     protected void doFilterInternal(
@@ -48,24 +50,30 @@ public class JwtFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
 
             String token = header.substring(7);
+
             Claims claims = jwtUtil.extractClaims(token);
 
             String email = claims.getSubject();
             String role = claims.get("role", String.class);
 
-            userRepository.findByEmail(email).ifPresent(user -> {
+            if (role != null && !role.startsWith("ROLE_")) {
+                role = "ROLE_" + role;
+            }
+
+            UserEntity user = userRepository.findByEmail(email).orElse(null);
+
+            if (user != null) {
 
                 Authentication auth =
                         new UsernamePasswordAuthenticationToken(
                                 user,
                                 null,
-                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                                List.of(new SimpleGrantedAuthority(role))
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            });
+            }
         }
-
 
         chain.doFilter(request, response);
     }
